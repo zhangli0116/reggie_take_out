@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.OrdersMapper">
+    <resultMap id="OrdersDtoMap" type="com.example.dto.OrdersDto">
+        <id column="id" property="id" />
+        <result column="number" property="number" />
+        <result column="status" property="status" />
+        <result column="user_id" property="userId" />
+        <result column="address_book_id" property="addressBookId" />
+        <result column="order_time" property="orderTime" />
+        <result column="checkout_time" property="checkoutTime" />
+        <result column="pay_method" property="payMethod" />
+        <result column="amount" property="amount" />
+        <result column="remark" property="remark" />
+        <result column="user_name" property="userName" />
+        <result column="phone" property="phone" />
+        <result column="address" property="address" />
+        <result column="consignee" property="consignee" />
+
+
+        <collection property="orderDetails" ofType="com.example.entity.OrderDetail">
+            <id column="order_detail_id" property="id" />
+            <result column="order_detail_name" property="name" />
+            <result column="order_detail_image" property="image" />
+            <result column="order_detail_order_id" property="orderId" />
+            <result column="order_detail_setmeal_id" property="setmealId" />
+            <result column="order_detail_dish_flavor" property="dishFlavor" />
+            <result column="order_detail_number" property="number" />
+            <result column="order_detail_amount" property="amount" />
+        </collection>
+    </resultMap>
+
+    <select id="page" resultMap="OrdersDtoMap">
+        select orders.*,
+               order_detail.id order_detail_id,
+               order_detail.name order_detail_name,
+               order_detail.image order_detail_image,
+               order_detail.order_id order_detail_order_id,
+               order_detail.setmeal_id order_detail_setmeal_id,
+               order_detail.dish_flavor order_detail_dish_flavor,
+               order_detail.number order_detail_number,
+               order_detail.amount order_detail_amount
+        from orders
+        left join order_detail
+        on orders.id = order_detail.order_id ${ew.customSqlSegment}
+
+    </select>
+</mapper>
